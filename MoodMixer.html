@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MoodMixer 2.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-light: #f0f0f3;
+      --bg-dark: #1e1e2f;
+      --text-light: #1e1e2f;
+      --text-dark: #f0f0f3;
+      --card-radius: 20px;
+      --transition: 0.4s ease;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg-light);
+      color: var(--text-light);
+      transition: background var(--transition), color var(--transition);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .dark-mode {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin: 20px 0 10px;
+    }
+
+    .mood-box {
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      border-radius: var(--card-radius);
+      max-width: 500px;
+      width: 100%;
+      margin-top: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      transition: background var(--transition);
+    }
+
+    select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 1rem;
+      margin-top: 10px;
+      border: none;
+      outline: none;
+    }
+
+    .quote, .playlist {
+      margin-top: 20px;
+      font-size: 1.1rem;
+    }
+
+    .quote {
+      font-style: italic;
+      opacity: 0.9;
+    }
+
+    .playlist iframe {
+      width: 100%;
+      height: 80px;
+      margin-top: 15px;
+      border-radius: 12px;
+    }
+
+    .toggle-mode {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      padding: 8px 16px;
+      background: #ddd;
+      border: none;
+      border-radius: 8px;
+      transition: background var(--transition);
+    }
+
+    .dark-mode .toggle-mode {
+      background: #333;
+      color: white;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+      .mood-box {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="toggle-mode" onclick="toggleMode()">🌙 / ☀️</button>
+  <h1>🎧 MoodMixer 2.0</h1>
+
+  <div class="mood-box">
+    <label for="moodSelector"><strong>Wie fühlst du dich heute?</strong></label>
+    <select id="moodSelector">
+      <option value="happy">😄 Fröhlich</option>
+      <option value="sad">😢 Traurig</option>
+      <option value="chill">😌 Entspannt</option>
+      <option value="angry">😡 Genervt</option>
+      <option value="motivated">🔥 Motiviert</option>
+    </select>
+
+    <div class="quote" id="quote"></div>
+    <div class="playlist" id="playlist"></div>
+  </div>
+
+  <script>
+    const moods = {
+      happy: {
+        quote: "Lächle, und die Welt lächelt mit dir.",
+        playlistEmbed: "https://open.spotify.com/embed/playlist/37i9dQZF1DXdPec7aLTmlC"
+      },
+      sad: {
+        quote: "Auch Regen gehört zum Wachsen dazu.",
+        playlistEmbed: "https://open.spotify.com/embed/playlist/37i9dQZF1DWVV27DiNWxkR"
+      },
+      chill: {
+        quote: "Atme ein. Atme aus. Alles ist gut.",
+        playlistEmbed: "https://open.spotify.com/embed/playlist/37i9dQZF1DX4WYpdgoIcn6"
+      },
+      angry: {
+        quote: "Wut ist ein Feuer – nutze es, bevor es dich verbrennt.",
+        playlistEmbed: "https://open.spotify.com/embed/playlist/37i9dQZF1DWX83CujKHHOn"
+      },
+      motivated: {
+        quote: "Heute ist der erste Tag vom Rest deines Lebens!",
+        playlistEmbed: "https://open.spotify.com/embed/playlist/37i9dQZF1DX76Wlfdnj7AP"
+      }
+    };
+
+    const moodSelector = document.getElementById("moodSelector");
+    const quoteDiv = document.getElementById("quote");
+    const playlistDiv = document.getElementById("playlist");
+
+    function updateMood(mood) {
+      const { quote, playlistEmbed } = moods[mood];
+      quoteDiv.innerText = `"${quote}"`;
+      playlistDiv.innerHTML = `<iframe src="${playlistEmbed}" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>`;
+    }
+
+    moodSelector.addEventListener("change", (e) => {
+      updateMood(e.target.value);
+    });
+
+    function toggleMode() {
+      document.body.classList.toggle("dark-mode");
+    }
+
+    // Initial mood on load
+    updateMood(moodSelector.value);
+  </script>
+</body>
+</html>
